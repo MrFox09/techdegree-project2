@@ -14,6 +14,22 @@ FSJS project 2 - List Filter and Pagination
 const listItems = document.getElementsByClassName('student-item cf');
 const shownStudent = 10;
 
+// create search bar
+const divHeader = document.getElementsByClassName("page-header cf")[0];
+
+const searchDiv = document.createElement('div');
+searchDiv.className ='student-search';
+
+const input = document.createElement('input');
+input.setAttribute("placeholder","Search for students...");
+
+const button = document.createElement('button');
+button.textContent = 'Search';
+searchDiv.appendChild(input);
+searchDiv.appendChild(button);
+divHeader.appendChild(searchDiv);
+
+
 
 
 /***
@@ -81,6 +97,8 @@ const appendPageLinks = (list) => {
     });
   }
 };
+
+
 // initiate the program, to see the first 10 List entries and append the Page-Links to listItems
 appendPageLinks(listItems);
 showPage(listItems,1);
