@@ -23,69 +23,70 @@ const shownStudent = 10;
 
 
 /***
-   Create the `showPage` function to hide all of the items in the
-   list except for the ten you want to show.
-
-   Pro Tips:
-     - Keep in mind that with a list of 54 students, the last page
-       will only display four.
-     - Remember that the first student has an index of 0.
-     - Remember that a function `parameter` goes in the parens when
-       you initially define the function, and it acts as a variable
-       or a placeholder to represent the actual function `argument`
-       that will be passed into the parens later when you call or
-       "invoke" the function
+  showPage creates list who hide every list item, except the number we want, in this case 10
 ***/
-const showPage = (list,page) => {
+const showPage = (list, page) => {
 
-let startIndex = (page * shownStudent) - shownStudent;
-let endIndex = page * shownStudent;
+  let startIndex = (page * shownStudent) - shownStudent;
+  let endIndex = page * shownStudent;
 
-for (let i = 0; i < list.length; i++) {
+  for (let i = 0; i < list.length; i++) {
     if (i >= startIndex && i < endIndex) {
       list[i].style.display = '';
 
-  }else{
+    } else {
       list[i].style.display = 'none';
 
+    }
   }
-}
 };
 
 
-/***
-   Create the `appendPageLinks function` to generate, append, and add
-   functionality to the pagination buttons.
-***/
+
+  // appendPageLinks takes a list an an argument and adds Page Links to the bottom, also adds an eventListener
+  // to every link to loop through the list
 
 const appendPageLinks = (list) => {
   const firstDiv = document.getElementsByClassName('page')[0];
-  // list_length/shown_Students to calculate the amount of buttons, always rounded up to show the rest of the list in the last button
+  // list_length/shown_Students to calculate the amount of linkButtons, always rounded up to show the rest of the list in the last linkButton
   let buttonNumber = Math.ceil(list.length / shownStudent);
   // create the div and the ul to store the list elements
   const div = document.createElement('div');
   div.className = 'pagination';
   const ul = document.createElement('ul');
 
- //create the links, depending on the list length
-  for (let i = 0; i < buttonNumber ; i++) {
+  //create the li and the link element, depending on the list length and add it to the ul
+  for (let i = 0; i < buttonNumber; i++) {
     const li = document.createElement('li');
     const a = document.createElement('a');
-    a.setAttribute("href","#");
+    a.setAttribute("href", "#");
     //set the link name, the first is 1 instead of 0 (+1)
-    a.textContent = i+1;
-     if (i === 0 ) {
-       a.className = 'active';
-     }
+    a.textContent = i + 1;
+    if (i === 0) {
+      a.className = 'active';
+    }
     li.appendChild(a);
     ul.appendChild(li);
   }
+  div.appendChild(ul);
+  //add the new div to parent div
+  firstDiv.appendChild(div);
 
-div.appendChild(ul);
-firstDiv.appendChild(div);
+  // add an eventListener to every a element
+  let a = document.getElementsByTagName('a');
+  for (var i = 0; i < a.length; i++) {
+
+    a[i].addEventListener('click', (event) => {
+      let pageNumber = event.target.textContent;
+      for (let i = 0; i < a.length; i++) {
+        a[i].classList.remove('active');
+      }
+      event.target.className = 'active';
+      //call showPage function to show the items we have selected
+      showPage(listItems, pageNumber);
+    });
+  }
 };
-
+// initiate the program, to see the first 10 List entries and append the Page-Links to listItems
 appendPageLinks(listItems);
-
-
-// Remember to delete the comments that came with this file, and replace them with your own code comments.
+showPage(listItems,1);
