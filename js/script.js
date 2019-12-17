@@ -19,10 +19,10 @@ const listName = document.getElementsByTagName('h3');
 const divHeader = document.getElementsByClassName("page-header cf")[0];
 
 const searchDiv = document.createElement('div');
-searchDiv.className ='student-search';
+searchDiv.className = 'student-search';
 
 const input = document.createElement('input');
-input.setAttribute("placeholder","Search for students...");
+input.setAttribute("placeholder", "Search for students...");
 
 const button = document.createElement('button');
 button.textContent = 'Search';
@@ -32,27 +32,34 @@ divHeader.appendChild(searchDiv);
 
 
 
-/*** search function, looks if the input is in the list Item, returns an array of listItems and
- the counter for the pages to be shown in the showPage function
+/*** search function, looks if the input is in the list Item
  ***/
-const search = (input,listName) => {
+const search = (input, listName) => {
   const parentDiv = document.querySelector('.page');
   const paginationDiv = document.querySelector('.pagination');
+  const h2 = document.getElementsByTagName('h2')[0];
   let listArray = [];
 
 
   for (let i = 0; i < listName.length; i++) {
-      listItems[i].style.display = 'none';
+    listItems[i].style.display = 'none';
 
-      if (input.value.length !=0 && listName[i].textContent.toLowerCase().includes(input.value.toLowerCase())) {
+    if (input.value.length != 0 && listName[i].textContent.toLowerCase().includes(input.value.toLowerCase())) {
       listItems[i].style.display = '';
       listArray.push(listItems[i]);
     }
+    // test condition if the search was failed and show no results message on screen
+    if (listArray.length === 0) {
+      h2.textContent = 'no results are found';
+    } else {
+      h2.textContent = 'students';
+    }
   }
+
   // remove the inital div what was made by the first call of appendPageLinks function
   parentDiv.removeChild(paginationDiv);
   // call the functions to show search results an append links
-  showPage(listArray,1);
+  showPage(listArray, 1);
   appendPageLinks(listArray);
 
 };
@@ -80,8 +87,8 @@ const showPage = (list, page) => {
 
 
 
-  // appendPageLinks takes a list an an argument and adds Page Links to the bottom, also adds an eventListener
-  // to every link to loop through the list
+// appendPageLinks takes a list an an argument and adds Page Links to the bottom, also adds an eventListener
+// to every link to loop through the list
 
 const appendPageLinks = (list) => {
   const firstDiv = document.getElementsByClassName('page')[0];
@@ -127,12 +134,17 @@ const appendPageLinks = (list) => {
 
 // event listener on button to call search function
 
-button.addEventListener('click', (event) =>{
+button.addEventListener('click', (event) => {
   event.preventDefault();
-  search(input,listName);
+  search(input, listName);
+});
+// event listener on searchfield to call search function
+input.addEventListener('keyup', () =>{
+  search(input, listName);
+
 });
 
 
 // initiate the program, to see the first 10 List entries and append the Page-Links to listItems
 appendPageLinks(listItems);
-showPage(listItems,1);
+showPage(listItems, 1);
