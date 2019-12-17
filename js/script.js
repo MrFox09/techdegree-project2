@@ -13,6 +13,7 @@ FSJS project 2 - List Filter and Pagination
 ***/
 const listItems = document.getElementsByClassName('student-item cf');
 const shownStudent = 10;
+const listName = document.getElementsByTagName('h3');
 
 // create search bar
 const divHeader = document.getElementsByClassName("page-header cf")[0];
@@ -29,6 +30,32 @@ searchDiv.appendChild(input);
 searchDiv.appendChild(button);
 divHeader.appendChild(searchDiv);
 
+
+
+/*** search function, looks if the input is in the list Item, returns an array of listItems and
+ the counter for the pages to be shown in the showPage function
+ ***/
+const search = (input,listName) => {
+  const parentDiv = document.querySelector('.page');
+  const paginationDiv = document.querySelector('.pagination');
+  let listArray = [];
+
+
+  for (let i = 0; i < listName.length; i++) {
+      listItems[i].style.display = 'none';
+
+      if (input.value.length !=0 && listName[i].textContent.toLowerCase().includes(input.value.toLowerCase())) {
+      listItems[i].style.display = '';
+      listArray.push(listItems[i]);
+    }
+  }
+  // remove the inital div what was made by the first call of appendPageLinks function
+  parentDiv.removeChild(paginationDiv);
+  // call the functions to show search results an append links
+  showPage(listArray,1);
+  appendPageLinks(listArray);
+
+};
 
 
 
@@ -97,6 +124,13 @@ const appendPageLinks = (list) => {
     });
   }
 };
+
+// event listener on button to call search function
+
+button.addEventListener('click', (event) =>{
+  event.preventDefault();
+  search(input,listName);
+});
 
 
 // initiate the program, to see the first 10 List entries and append the Page-Links to listItems
