@@ -4,15 +4,13 @@ Treehouse Techdegree:
 FSJS project 2 - List Filter and Pagination
 ******************************************/
 
-// Study guide for this project - https://drive.google.com/file/d/1OD1diUsTMdpfMDv677TfL1xO2CEkykSz/view?usp=sharing
-
-
-/***
+/*
    set Global variables to store the listItem which will be manipulated
    set the number of shown listItems(students) per page
-***/
+*/
 const listItems = document.getElementsByClassName('student-item cf');
 const shownStudent = 10;
+// store the names for the search function
 const listName = document.getElementsByTagName('h3');
 
 // create search bar
@@ -32,13 +30,14 @@ divHeader.appendChild(searchDiv);
 
 
 
-/*** search function, looks if the input is in the list Item
- ***/
+/* search function, looks if the input is in the list Item, removes inital list
+ and add a results list
+ */
 const search = (input, listName) => {
   const parentDiv = document.querySelector('.page');
   const paginationDiv = document.querySelector('.pagination');
   const h2 = document.getElementsByTagName('h2')[0];
-  let listArray = [];
+  let resultsArray = [];
 
 
   for (let i = 0; i < listName.length; i++) {
@@ -46,10 +45,10 @@ const search = (input, listName) => {
 
     if (input.value.length != 0 && listName[i].textContent.toLowerCase().includes(input.value.toLowerCase())) {
       listItems[i].style.display = '';
-      listArray.push(listItems[i]);
+      resultsArray.push(listItems[i]);
     }
     // test condition if the search was failed and show no results message on screen
-    if (listArray.length === 0) {
+    if (resultsArray.length === 0) {
       h2.textContent = 'no results are found';
     } else {
       h2.textContent = 'students';
@@ -59,16 +58,16 @@ const search = (input, listName) => {
   // remove the inital div what was made by the first call of appendPageLinks function
   parentDiv.removeChild(paginationDiv);
   // call the functions to show search results an append links
-  showPage(listArray, 1);
-  appendPageLinks(listArray);
+  showPage(resultsArray, 1);
+  appendPageLinks(resultsArray);
 
 };
 
 
 
-/***
-  showPage creates list who hide every list item, except the number we want, in this case 10
-***/
+
+  //showPage creates list to hide every list item, except 10, depending on the Page link
+
 const showPage = (list, page) => {
 
   let startIndex = (page * shownStudent) - shownStudent;
@@ -87,8 +86,8 @@ const showPage = (list, page) => {
 
 
 
-// appendPageLinks takes a list an an argument and adds Page Links to the bottom, also adds an eventListener
-// to every link to loop through the list
+/* appendPageLinks takes a list an an argument and adds Page Links to the bottom, also adds an eventListener
+ to every link to navigate through the list*/
 
 const appendPageLinks = (list) => {
   const firstDiv = document.getElementsByClassName('page')[0];
@@ -118,7 +117,7 @@ const appendPageLinks = (list) => {
 
   // add an eventListener to every a element
   let a = document.getElementsByTagName('a');
-  for (var i = 0; i < a.length; i++) {
+  for (let i = 0; i < a.length; i++) {
 
     a[i].addEventListener('click', (event) => {
       let pageNumber = event.target.textContent;
@@ -126,7 +125,7 @@ const appendPageLinks = (list) => {
         a[i].classList.remove('active');
       }
       event.target.className = 'active';
-      //call showPage function to show the items we have selected
+      //call showPage function to show the items/page we have selected
       showPage(listItems, pageNumber);
     });
   }
@@ -138,7 +137,7 @@ button.addEventListener('click', (event) => {
   event.preventDefault();
   search(input, listName);
 });
-// event listener on searchfield to call search function
+// event listener on the searchfield to call search function
 input.addEventListener('keyup', () =>{
   search(input, listName);
 
