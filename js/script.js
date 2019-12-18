@@ -126,7 +126,7 @@ const appendPageLinks = (list) => {
       }
       event.target.className = 'active';
       //call showPage function to show the items/page we have selected
-      showPage(listItems, pageNumber);
+      showPage(list, pageNumber);
     });
   }
 };
